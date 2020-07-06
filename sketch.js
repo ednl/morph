@@ -14,6 +14,7 @@ function windowResized() {
 	scaling = half - margin;
 	pixsize = 1 / dim;
 	resizeCanvas(dim, dim);
+	textSize(max(10, round(dim / 80)));
 
 	if (slide1) {
 		slide1.position(margin/2, 0);
@@ -70,6 +71,19 @@ function setup() {
 
 function draw() {
 	background(bgCol);
+
+	push();
+	fill(fgCol);
+	strokeWeight(0);
+	textAlign(LEFT, TOP);
+	text(slide1.value(), 10, 16);
+	textAlign(RIGHT, TOP);
+	let t = slide2.value();
+	if (t == 13)
+		t = "∞";
+	text(t, width - 10, 16);
+	pop();
+
 	translate(half, half);
 	scale(scaling, -scaling);
 	rotate(rotAngle);
@@ -78,8 +92,8 @@ function draw() {
 	const f1 = 0.5 + hcosma;
 	const f2 = 0.5 - hcosma;
 	fill(255 * f1, 51 * f2, 255 * f2);
-	// const morph = 1 - 0.5 * n1 * f2;  // max overshoot without arcs intersecting
-	const morph = f1;
+	const morph = 1 - 0.5 * n1 * f2;  // max overshoot without arcs intersecting (circle to polygon)
+	// const morph = f1;  // no overshoot either way
 	beginShape();
 	for (let i = 0; i < p1.length; ++i) {
 		const v = p5.Vector.lerp(p1[i], p2[i], morph);
